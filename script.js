@@ -1,6 +1,7 @@
 function getComputerChoice() {
   const choiceNumber = Math.floor(Math.random() * 3);
   let computerChoice;
+
   switch (choiceNumber) {
     case 0:
       computerChoice = "Rock";
@@ -11,28 +12,55 @@ function getComputerChoice() {
     default:
       computerChoice = "Scissors";
   }
+
   return computerChoice;
 }
 
 function playRound(playerSelection, computerSelection) {
   let result;
 
-  if (playerSelection == computerSelection) {
-    return `Both selected ${computerSelection}. Tie!`;
-  } else if (playerSelection == "Rock") {
-    result = computerSelection == "Paper" ? 0 : 1;
-  } else if (playerSelection == "Paper") {
-    result = computerSelection == "Scissors" ? 0 : 1;
+  if (playerSelection === computerSelection) {
+    return "Tie";
+  } else if (playerSelection === "Rock") {
+    result = computerSelection === "Paper" ? "Lose" : "Win";
+  } else if (playerSelection === "Paper") {
+    result = computerSelection === "Scissors" ? "Lose" : "Win";
   } else {
-    result = computerSelection == "Rock" ? 0 : 1;
+    result = computerSelection === "Rock" ? "Lose" : "Win";
   }
 
-  if (result == 1) {
-    return `You win! ${playerSelection} beats ${computerSelection}`;
-  }
-  return `You lose! ${computerSelection} beats ${playerSelection}`;
+  return result;
 }
 
-const playerSelection = "Rock";
-const computerSelection = getComputerChoice();
-console.log(playRound(playerSelection, computerSelection));
+function game() {
+  let playerScore = 0;
+  let computerScore = 0;
+
+  for (let i = 0; i < 5; i++) {
+    let playerPrompt = prompt("Choose: Rock, Paper, or Scissors?");
+    const playerChoice = formatPlayerChoice(playerPrompt);
+    const computerChoice = getComputerChoice();
+    const result = playRound(playerChoice, computerChoice);
+
+    if (result === "Lose") {
+      console.log(`You lose! ${computerChoice} beats ${playerChoice}`);
+      computerScore++;
+    } else if (result === "Win") {
+      console.log(`You win! ${playerChoice} beats ${computerChoice}`);
+      playerScore++;
+    } else {
+      console.log(`Both selected ${computerChoice}. Tie!`);
+    }
+  }
+
+  if (playerScore > computerScore) {
+    return "You win the match!";
+  } else if (playerScore < computerScore) {
+    return "Computer win the match!";
+  }
+  return "Tie!";
+}
+
+function formatPlayerChoice(choice) {
+  return choice.charAt(0).toUpperCase() + choice.slice(1).toLowerCase();
+}
